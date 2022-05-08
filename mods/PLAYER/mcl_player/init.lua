@@ -22,17 +22,10 @@ mcl_player.player_register_model("character.b3d", {
 	animations = {
 		-- Standard animations.
 		stand		= {x=  0, y= 79},
-		lay		= {x=162, y=166},
 		walk		= {x=168, y=187},
 		mine		= {x=189, y=198},
 		walk_mine	= {x=200, y=219},
 		sit		= {x= 81, y=160},
-		sneak_stand	= {x=222, y=302},
-		sneak_mine	= {x=346, y=366},
-		sneak_walk	= {x=304, y=323},
-		sneak_walk_mine	= {x=325, y=344},
-		run_walk	= {x=440, y=460},
-		run_walk_mine	= {x=461, y=481},
 	},
 })
 
@@ -151,59 +144,19 @@ minetest.register_globalstep(function(dtime)
 				walking = true
 			end
 
-			-- Determine if the player is sneaking, and reduce animation speed if so
-			if controls.sneak then
-				animation_speed_mod = animation_speed_mod / 2
-			end
-
-
-
-			-- ask if player is swiming
-			local head_in_water = minetest.get_item_group(mcl_playerinfo[name].node_head, "water") ~= 0
-			-- ask if player is sprinting
-			local is_sprinting = mcl_sprint.is_sprinting(name)
-
 			local velocity = player:get_velocity() or player:get_player_velocity()
 
 			-- Apply animations based on what the player is doing
-			if player:get_hp() == 0 then
-				player_set_animation(player, "lay")
-			elseif walking and velocity.x > 0.35 or walking and velocity.x < -0.35 or walking and velocity.z > 0.35 or walking and velocity.z < -0.35 then
-				if player_sneak[name] ~= controls.sneak then
-					player_anim[name] = nil
-					player_sneak[name] = controls.sneak
-				end
-				if controls.LMB and not controls.sneak and head_in_water and is_sprinting == true then
-					player_set_animation(player, "swim_walk_mine", animation_speed_mod)
-				elseif not controls.sneak and head_in_water and is_sprinting == true then
-					player_set_animation(player, "swim_walk", animation_speed_mod)
-				elseif is_sprinting == true and controls.LMB and not controls.sneak and not head_in_water then
-					player_set_animation(player, "run_walk_mine", animation_speed_mod)
-				elseif controls.LMB and not controls.sneak then
+			if walking and velocity.x > 0.35 or walking and velocity.x < -0.35 or walking and velocity.z > 0.35 or walking and velocity.z < -0.35 then
+				if controls.LMB and not controls.sneak then
 					player_set_animation(player, "walk_mine", animation_speed_mod)
-				elseif controls.LMB and controls.sneak and is_sprinting ~= true then
-					player_set_animation(player, "sneak_walk_mine", animation_speed_mod)
-				elseif is_sprinting == true and not controls.sneak and not head_in_water then
-					player_set_animation(player, "run_walk", animation_speed_mod)
-				elseif controls.sneak and not controls.LMB then
-					player_set_animation(player, "sneak_walk", animation_speed_mod)
 				else
 					player_set_animation(player, "walk", animation_speed_mod)
 				end
-			elseif controls.LMB and not controls.sneak and head_in_water and is_sprinting == true then
-				player_set_animation(player, "swim_mine")
-			elseif not controls.LMB and not controls.sneak and head_in_water and is_sprinting == true then
-				player_set_animation(player, "swim_stand")
-			elseif controls.LMB and not controls.sneak then
+			elseif controls.LMB then
 				player_set_animation(player, "mine")
-			elseif controls.LMB and controls.sneak then
-				player_set_animation(player, "sneak_mine")
-			elseif not controls.sneak and head_in_water and is_sprinting == true then
-				player_set_animation(player, "swim_stand", animation_speed_mod)
-			elseif not controls.sneak then
-				player_set_animation(player, "stand", animation_speed_mod)
 			else
-				player_set_animation(player, "sneak_stand", animation_speed_mod)
+				player_set_animation(player, "stand", animation_speed_mod)
 			end
 		end
 	end
