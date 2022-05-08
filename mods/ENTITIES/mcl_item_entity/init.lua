@@ -267,10 +267,7 @@ function minetest.item_drop(itemstack, dropper, pos)
 	if dropper and dropper:is_player() then
 		local v = dropper:get_look_dir()
 		local p = {x=pos.x, y=pos.y+1.2, z=pos.z}
-		local cs = itemstack:get_count()
-		if dropper:get_player_control().sneak then
-			cs = 1
-		end
+		local cs = 1
 		local item = itemstack:take_item(cs)
 		local obj = minetest.add_item(p, item)
 		if obj then
