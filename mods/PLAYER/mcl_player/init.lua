@@ -26,6 +26,10 @@ mcl_player.player_register_model("character.b3d", {
 		mine		= {x=189, y=198},
 		walk_mine	= {x=200, y=219},
 		sit		= {x= 81, y=160},
+		sneak_stand	= {x=222, y=302},
+		sneak_mine	= {x=346, y=366},
+		sneak_walk	= {x=304, y=323},
+		sneak_walk_mine	= {x=325, y=344},
 	},
 })
 
@@ -144,19 +148,36 @@ minetest.register_globalstep(function(dtime)
 				walking = true
 			end
 
+			-- Determine if the player is sneaking, and reduce animation speed if so
+			if controls.sneak then
+				animation_speed_mod = animation_speed_mod / 2
+			end
+
 			local velocity = player:get_velocity() or player:get_player_velocity()
 
 			-- Apply animations based on what the player is doing
 			if walking and velocity.x > 0.35 or walking and velocity.x < -0.35 or walking and velocity.z > 0.35 or walking and velocity.z < -0.35 then
+				if player_sneak[name] ~= controls.sneak then
+					player_anim[name] = nil
+					player_sneak[name] = controls.sneak
+				end
 				if controls.LMB and not controls.sneak then
 					player_set_animation(player, "walk_mine", animation_speed_mod)
+				elseif controls.LMB and controls.sneak and is_sprinting ~= true then
+					player_set_animation(player, "sneak_walk_mine", animation_speed_mod)
+				elseif controls.sneak and not controls.LMB then
+					player_set_animation(player, "sneak_walk", animation_speed_mod)
 				else
 					player_set_animation(player, "walk", animation_speed_mod)
 				end
-			elseif controls.LMB then
+			elseif controls.LMB and not controls.sneak then
 				player_set_animation(player, "mine")
-			else
+			elseif controls.LMB and controls.sneak then
+				player_set_animation(player, "sneak_mine")
+			elseif not controls.sneak then
 				player_set_animation(player, "stand", animation_speed_mod)
+			else
+				player_set_animation(player, "sneak_stand", animation_speed_mod)
 			end
 		end
 	end
