@@ -165,14 +165,14 @@ minetest.register_globalstep(function(dtime)
 			-- controls head pitch when sneaking
 			set_bone_position_conditional(player,"Head", vector.new(0,6.3,0), vector.new(pitch+36,0,0))
 			-- sets eye height, and nametag color accordingly
-			set_properties_conditional(player,{collisionbox = {-0.35,0,-0.35,0.35,1.8,0.35}, eye_height = 1.35, nametag_color = { r = 225, b = 225, a = 0, g = 225 }})
+			set_properties_conditional(player,{collisionbox = {-0.35,0,-0.35,0.35,1.8,0.35}, eye_height = 1.5, nametag_color = { r = 225, b = 225, a = 0, g = 225 }})
 			-- sneaking body conrols
 			set_bone_position_conditional(player,"Body_Control", vector.new(0,6.3,0), vector.new(0,0,0))
 		elseif minetest.get_item_group(mcl_playerinfo[name].node_head, "water") ~= 0 and player:get_attach() == nil and mcl_sprint.is_sprinting(name) == true then
 			-- set head pitch and yaw when swimming
 			set_bone_position_conditional(player,"Head", vector.new(0,6.3,0), vector.new(pitch+90-degrees(dir_to_pitch(player_velocity)),yaw - player_vel_yaw * -1,0))
 			-- sets eye height, and nametag color accordingly
-			set_properties_conditional(player,{collisionbox = {-0.35,0,-0.35,0.35,0.8,0.35}, eye_height = 0.65, nametag_color = { r = 225, b = 225, a = 225, g = 225 }})
+			set_properties_conditional(player,{collisionbox = {-0.35,0,-0.35,0.35,0.8,0.35}, eye_height = 1.25, nametag_color = { r = 225, b = 225, a = 225, g = 225 }})
 			-- control body bone when swimming
 			set_bone_position_conditional(player,"Body_Control", vector.new(0,6.3,0), vector.new(degrees(dir_to_pitch(player_velocity)) - 90,player_vel_yaw * -1 - yaw + 180,0))
 
