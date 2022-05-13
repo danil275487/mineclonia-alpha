@@ -53,8 +53,8 @@ local function register_biomes()
 		depth_riverbed = 2,
 		y_min = 4,
 		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 39,
-		heat_point = 58,
+		humidity_point = 0,
+		heat_point = 0,
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 	})
@@ -66,8 +66,36 @@ local function register_biomes()
 		depth_riverbed = 2,
 		y_min = -2,
 		y_max = 4,
-		humidity_point = 39,
-		heat_point = 58,
+		humidity_point = 15,
+		heat_point = 15,
+		_mcl_biome_type = "small",
+		_mcl_palette_index = 0,
+	})
+	minetest.register_biome({
+		name = "Plains_gravel_beach",
+		node_filler = "mcl_core:gravel",
+		depth_filler = 3,
+		node_riverbed = "mcl_core:gravel",
+		depth_riverbed = 2,
+		y_min = -2,
+		y_max = 4,
+		humidity_point = 0,
+		heat_point = 25,
+		_mcl_biome_type = "small",
+		_mcl_palette_index = 0,
+	})
+	minetest.register_biome({
+		name = "Plains_shore",
+		node_top = "mcl_core:dirt_with_grass",
+		depth_top = 1,
+		node_filler = "mcl_core:dirt",
+		depth_filler = 2,
+		node_riverbed = "mcl_core:sand",
+		depth_riverbed = 2,
+		y_min = -2,
+		y_max = 4,
+		humidity_point = 15,
+		heat_point = 15,
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 	})
@@ -81,14 +109,14 @@ local function register_biomes()
 		depth_riverbed = 2,
 		y_min = OCEAN_MIN,
 		y_max = -2,
-		humidity_point = 39,
-		heat_point = 58,
+		humidity_point = 0,
+		heat_point = 0,
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 	})
 
 	-- Forest
-	--[[minetest.register_biome({
+	minetest.register_biome({
 		name = "Forest",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -96,10 +124,10 @@ local function register_biomes()
 		depth_filler = 3,
 		node_riverbed = "mcl_core:sand",
 		depth_riverbed = 2,
-		y_min = 1,
+		y_min = 4,
 		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 61,
-		heat_point = 45,
+		humidity_point = 25,
+		heat_point = 25,
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 13,
 	})
@@ -110,9 +138,37 @@ local function register_biomes()
 		node_riverbed = "mcl_core:sand",
 		depth_riverbed = 2,
 		y_min = -1,
-		y_max = 0,
-		humidity_point = 61,
-		heat_point = 45,
+		y_max = 4,
+		humidity_point = 25,
+		heat_point = 15,
+		_mcl_biome_type = "small",
+		_mcl_palette_index = 13,
+	})
+	minetest.register_biome({
+		name = "Forest_gravel_beach",
+		node_filler = "mcl_core:gravel",
+		depth_filler = 3,
+		node_riverbed = "mcl_core:gravel",
+		depth_riverbed = 2,
+		y_min = -1,
+		y_max = 4,
+		humidity_point = 25,
+		heat_point = 0,
+		_mcl_biome_type = "small",
+		_mcl_palette_index = 13,
+	})
+	minetest.register_biome({
+		name = "Forest_shore",
+		node_top = "mcl_core:dirt_with_grass",
+		depth_top = 1,
+		node_filler = "mcl_core:dirt",
+		depth_filler = 3,
+		node_riverbed = "mcl_core:sand",
+		depth_riverbed = 2,
+		y_min = -1,
+		y_max = 4,
+		humidity_point = 25,
+		heat_point = 25,
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 13,
 	})
@@ -126,11 +182,11 @@ local function register_biomes()
 		depth_riverbed = 2,
 		y_min = OCEAN_MIN,
 		y_max = -2,
-		humidity_point = 61,
-		heat_point = 45,
+		humidity_point = 25,
+		heat_point = 25,
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 13,
-	})]]
+	})
 
 	-- Add deep ocean and underground biomes automatically.
 	for i=1, #overworld_biomes do
@@ -190,15 +246,22 @@ local function register_decorations()
 			deco_type = "schematic",
 			place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 			sidelen = 80,
-			noise_params = {
-				offset = 0.000545,
-				scale = 0.0011,
-				spread = {x = 250, y = 250, z = 250},
-				seed = 3 + 5 * i,
-				octaves = 3,
-				persist = 0.66
-			},
-			biomes = {"Forest"},
+			fill_ratio = 0.00005,
+			biomes = {"Forest", "Forest_shore"},
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			schematic = minetest.get_modpath("mcl_core").."/schematics/mcl_core_oak_large_"..i..".mts",
+			flags = "place_center_x, place_center_z",
+			rotation = "random",
+		})
+
+		--Big trees for Plains
+		minetest.register_decoration({
+			deco_type = "schematic",
+			place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
+			sidelen = 80,
+			fill_ratio = 0.00001,
+			biomes = {"Plains", "Plains_shore"},
 			y_min = 1,
 			y_max = mcl_vars.mg_overworld_max,
 			schematic = minetest.get_modpath("mcl_core").."/schematics/mcl_core_oak_large_"..i..".mts",
@@ -219,7 +282,21 @@ local function register_decorations()
 			octaves = 3,
 			persist = 0.66
 		},
-		biomes = {"Forest"},
+		biomes = {"Forest", "Forest_shore"},
+		y_min = 1,
+		y_max = mcl_vars.mg_overworld_max,
+		schematic = minetest.get_modpath("mcl_core").."/schematics/mcl_core_oak_classic.mts",
+		flags = "place_center_x, place_center_z",
+		rotation = "random",
+	})
+
+	--Small “classic” oak (Plains)
+	minetest.register_decoration({
+		deco_type = "schematic",
+		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
+		sidelen = 16,
+		fill_ratio = 0.001,
+		biomes = {"Plains", "Plains_shore"},
 		y_min = 1,
 		y_max = mcl_vars.mg_overworld_max,
 		schematic = minetest.get_modpath("mcl_core").."/schematics/mcl_core_oak_classic.mts",
@@ -234,13 +311,27 @@ local function register_decorations()
 		sidelen = 16,
 		noise_params = {
 			offset = 0.002083,
-			scale = 0.0022,
+			scale = 0.00001,
 			spread = {x = 250, y = 250, z = 250},
 			seed = 3,
 			octaves = 3,
 			persist = 0.6,
 		},
-		biomes = {"Forest"},
+		biomes = {"Forest", "Forest_shore"},
+		y_min = 1,
+		y_max = mcl_vars.mg_overworld_max,
+		schematic = minetest.get_modpath("mcl_core").."/schematics/mcl_core_oak_balloon.mts",
+		flags = "place_center_x, place_center_z",
+		rotation = "random",
+	})
+
+	-- Rare balloon oak (Plains)
+	minetest.register_decoration({
+		deco_type = "schematic",
+		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
+		sidelen = 16,
+		fill_ratio = 0.001,
+		biomes = {"Plains", "Plains_shore"},
 		y_min = 1,
 		y_max = mcl_vars.mg_overworld_max,
 		schematic = minetest.get_modpath("mcl_core").."/schematics/mcl_core_oak_balloon.mts",
